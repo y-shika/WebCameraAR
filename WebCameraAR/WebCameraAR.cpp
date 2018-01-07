@@ -21,8 +21,6 @@ int main(void) {
 
 	char windowName1[] = "WebCamera";
 	namedWindow(windowName1, CV_WINDOW_AUTOSIZE);
-	/*char windowName2[] = "Video";
-	namedWindow(windowName2, CV_WINDOW_AUTOSIZE);*/
 
 	while (cvWaitKey(1) == -1) {
 		capture >> frame;
@@ -38,7 +36,6 @@ int main(void) {
 		warpAffine(Img, src_video, mat, src_video.size(), CV_INTER_LINEAR, BORDER_TRANSPARENT);
 
 		imshow(windowName1, src_video);
-		//imshow(windowName2, Img);
 	}
 
 	destroyAllWindows();
