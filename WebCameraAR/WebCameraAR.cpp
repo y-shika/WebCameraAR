@@ -7,20 +7,38 @@ using namespace std;
 
 int main(void) {
 	VideoCapture capture(0);
+	VideoCapture video("video\\shiki_chromakey.mp4");
 
 	if (!capture.isOpened())
 		return -1;
+	if (!video.isOpened())
+		return -1;
 
-	Mat src_video(Size(640, 480), CV_8UC1, Scalar::all(255));
-	Mat frame(Size(640, 480), CV_8UC1, Scalar::all(255));
+	Mat src_video;
+	Mat frame;
+	Mat Img;
+	Mat mat = (Mat_<double>(2, 3) << 1.0, 0.0, 10, 0.0, 1.0, 10);
 
-	char windowName[] = "WebCamera";
-	namedWindow(windowName, CV_WINDOW_AUTOSIZE);
+	char windowName1[] = "WebCamera";
+	namedWindow(windowName1, CV_WINDOW_AUTOSIZE);
+	/*char windowName2[] = "Video";
+	namedWindow(windowName2, CV_WINDOW_AUTOSIZE);*/
 
 	while (cvWaitKey(1) == -1) {
 		capture >> frame;
 		src_video = frame;
-		imshow(windowName, src_video);
+		video >> Img;
+
+		resize(src_video, src_video, Size(), 2, 2);
+		resize(Img, Img, Size(), 0.5, 0.5);
+
+		if (Img.empty())
+			break;
+
+		warpAffine(Img, src_video, mat, src_video.size(), CV_INTER_LINEAR, BORDER_TRANSPARENT);
+
+		imshow(windowName1, src_video);
+		//imshow(windowName2, Img);
 	}
 
 	destroyAllWindows();
